@@ -1,6 +1,7 @@
 package io.advantageous.dcos;
 
 
+import io.advantageous.discovery.DiscoveryService;
 import io.advantageous.qbit.admin.ServiceManagementBundle;
 import io.advantageous.qbit.annotation.RequestMapping;
 import io.advantageous.qbit.annotation.RequestMethod;
@@ -10,6 +11,7 @@ import io.advantageous.qbit.annotation.http.GET;
 import io.advantageous.qbit.annotation.http.POST;
 import io.advantageous.reakt.promise.Promise;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,11 +78,15 @@ public class TodoServiceImpl implements TodoService {
 
     private final ServiceManagementBundle mgmt;
 
+    private final DiscoveryService discoveryService;
+
     public TodoServiceImpl(ServiceManagementBundle mgmt) {
         this.mgmt = mgmt;
         /** Send stat count i.am.alive every three seconds.  */
         mgmt.reactor().addRepeatingTask(Duration.ofSeconds(3),
                 () -> mgmt.increment("i.am.alive"));
+
+        discoveryService = DiscoveryService.create();
 
     }
 
@@ -110,7 +116,7 @@ public class TodoServiceImpl implements TodoService {
 
 
     @Override
-    @GET(value = "/todo", method = RequestMethod.GET)
+    @GET(value = "/todo")
     public final Promise<List<Todo>> listTodos() {
         return invokablePromise(promise -> {
             /** Send KPI addTodo.listTodos every time the listTodos method gets called. */
@@ -119,5 +125,10 @@ public class TodoServiceImpl implements TodoService {
         });
     }
 
+
+    @POST(value = "/service")
+    public final Promise<List<URI>> listServices(URI uri) {
+        return discoveryService.lookupService(uri);
+    }
 
 }
