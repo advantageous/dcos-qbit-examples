@@ -1,0 +1,63 @@
+{
+
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "advantageous/run-java-zip:0.2",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 8081,
+          "hostPort": 0,
+          "servicePort": 10101,
+          "protocol": "tcp"
+        },
+        {
+          "containerPort": 9090,
+          "hostPort":  0,
+          "servicePort": 10102,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  },
+  "cmd": "/opt/install.sh",
+  "cpus": 0.5,
+  "env": {
+    "DEPLOYMENT_ENVIRONMENT": "integration",
+    "JAVA_ZIP_LOCATION": "https://s3-us-west-2.amazonaws.com/sample-deploy/sample-dcos-cas-0.9.5.zip",
+    "JAVA_RUN_COMMAND": "/opt/sample-dcos-cas-0.9.5/bin/sample-dcos-cas",
+    "JAVA_RUN_DEBUG" : "TRUE"
+  },
+  "healthChecks": [
+    {
+      "gracePeriodSeconds": 30,
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 3,
+      "path": "/__admin/ok",
+      "portIndex": 1,
+      "protocol": "HTTP"
+    }
+  ],
+  "id": "sample-dcos3",
+  "instances": 3,
+  "mem": 1024,
+  "portDefinitions": [
+    {
+      "name": "eventbus",
+      "port": 0,
+      "protocol": "tcp"
+    },
+    {
+      "name": "admin",
+      "port": 0,
+      "protocol": "tcp"
+    }
+  ],
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 0
+  },
+  "labels":{
+    "HAPROXY_GROUP":"external"
+  }
+}

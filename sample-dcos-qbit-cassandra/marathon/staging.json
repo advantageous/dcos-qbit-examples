@@ -1,0 +1,37 @@
+{
+
+  "instances": 1,
+  "cpus": 0.5,
+  "mem": 1024,
+  "acceptedResourceRoles": [
+    "slave_public"
+  ],
+  "portDefinitions": [
+    {
+      "port": 0,
+      "protocol": "tcp",
+      "name": "eventbus"
+    },
+    {
+      "port": 0,
+      "protocol": "tcp",
+      "name": "admin"
+    }
+  ],
+  "healthChecks": [
+    {
+      "protocol": "HTTP",
+      "intervalSeconds": 20,
+      "maxConsecutiveFailures": 3,
+      "gracePeriodSeconds": 30,
+      "portIndex": 1,
+      "path": "/__admin/ok"
+    }
+  ],
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 0
+  },
+  "uris": [
+    "https://s3-us-west-2.amazonaws.com/sample-deploy/sample-dcos-0.9.4.zip"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "advantageous/grafana:v1",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 9000,
+          "hostPort": 12100,
+          "servicePort": 12100,
+          "protocol": "tcp"
+        },
+        {
+          "containerPort": 8086,
+          "hostPort": 12101,
+          "servicePort": 12101,
+          "protocol": "tcp"
+        },
+        {
+          "containerPort": 8083,
+          "hostPort": 12102,
+          "servicePort": 12102,
+          "protocol": "tcp"
+        },
+        {
+          "containerPort": 8125,
+          "hostPort": 12103,
+          "servicePort": 12103,
+          "protocol": "udp"
+        }
+      ]
+    }
+  },
+  "id": "grafana",
+  "instances": 1,
+  "mem": 1024,
+  "portDefinitions": [
+    {
+      "port": 0,
+      "protocol": "tcp"
+    },
+    {
+      "port": 0,
+      "protocol": "tcp"
+    },
+    {
+      "port": 0,
+      "protocol": "tcp"
+    },
+    {
+      "port": 0,
+      "protocol": "udp"
+    }
+  ],
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 0
+  },
+  "labels":{
+    "HAPROXY_GROUP":"external",
+    "HAPROXY_1_GROUP":"external",
+    "HAPROXY_2_GROUP":"external"
+
+  }
+}
