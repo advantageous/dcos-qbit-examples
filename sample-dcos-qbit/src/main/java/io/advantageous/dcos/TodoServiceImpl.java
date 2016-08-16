@@ -10,6 +10,8 @@ import io.advantageous.qbit.annotation.http.DELETE;
 import io.advantageous.qbit.annotation.http.GET;
 import io.advantageous.qbit.annotation.http.POST;
 import io.advantageous.reakt.promise.Promise;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.time.Duration;
@@ -75,25 +77,29 @@ public class TodoServiceImpl implements TodoService {
 
 
     private final Map<String, Todo> todoMap = new TreeMap<>();
-
     private final ServiceManagementBundle mgmt;
-
     private final DiscoveryService discoveryService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public TodoServiceImpl(ServiceManagementBundle mgmt) {
         this.mgmt = mgmt;
+
         /** Send stat count i.am.alive every three seconds.  */
         mgmt.reactor().addRepeatingTask(Duration.ofSeconds(3),
                 () -> mgmt.increment("i.am.alive"));
 
+        logger.info("Creating discovery service");
         discoveryService = DiscoveryService.create();
 
+
+        logger.info("Todo service created");
     }
 
 
     @Override
     @POST(value = "/todo")
     public Promise<Boolean> addTodo(final Todo todo) {
+        logger.debug("Add Todo to list {}", todo);
         return invokablePromise(promise -> {
             /** Send KPI addTodo called every time the addTodo method gets called. */
             mgmt.increment("addTodo.called");
@@ -106,6 +112,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     @DELETE(value = "/todo")
     public final Promise<Boolean> removeTodo(final @RequestParam("id") String id) {
+        logger.debug("Add Todo from list {}", id);
         return invokablePromise(promise -> {
             /** Send KPI addTodo.removed every time the removeTodo method gets called. */
             mgmt.increment("removeTodo.called");
@@ -118,6 +125,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     @GET(value = "/todo")
     public final Promise<List<Todo>> listTodos() {
+        logger.debug("List todos");
         return invokablePromise(promise -> {
             /** Send KPI addTodo.listTodos every time the listTodos method gets called. */
             mgmt.increment("listTodos.called");
@@ -128,6 +136,7 @@ public class TodoServiceImpl implements TodoService {
 
     @POST(value = "/service")
     public final Promise<List<URI>> listServices(URI uri) {
+        logger.debug("List services");
         return discoveryService.lookupService(uri);
     }
 

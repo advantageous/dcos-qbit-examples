@@ -58,6 +58,13 @@ dependencies {
     //Test compile for docker
     testCompile 'io.advantageous.gradle:docker-test-plugin:0.1.6'
 
+    // Logging.
+    compile("ch.qos.logback:logback-core:1.1.3")
+    compile("ch.qos.logback:logback-classic:1.1.3")
+    compile("org.slf4j:slf4j-api:1.7.12")
+    compile('net.logstash.logback:logstash-logback-encoder:4.6')
+
+
 }
 
 
