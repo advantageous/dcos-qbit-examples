@@ -4,6 +4,8 @@ package io.advantageous.dcos;
 import io.advantageous.qbit.admin.ManagedServiceBuilder;
 import io.advantageous.qbit.admin.ServiceManagementBundle;
 
+import java.net.URI;
+
 import static io.advantageous.qbit.admin.ManagedServiceBuilder.managedServiceBuilder;
 import static io.advantageous.qbit.admin.ServiceManagementBundleBuilder.serviceManagementBundleBuilder;
 
@@ -19,8 +21,8 @@ public class Main {
                 .setRootURI("/v1") //Defaults to services
                 .setPort(8081); //Defaults to 8080 or environment variable PORT
 
-        //managedServiceBuilder.enableStatsD(URI.create("udp://192.168.99.100:8125"));
-        //managedServiceBuilder.getContextMetaBuilder().setTitle("TodoMicroService");
+        managedServiceBuilder.enableStatsD(URI.create("udp://grafana.marathon.mesos:12103"));
+        managedServiceBuilder.getContextMetaBuilder().setTitle("TodoMicroService");
 
         /** Create the management bundle for this service. */
         final ServiceManagementBundle serviceManagementBundle =
