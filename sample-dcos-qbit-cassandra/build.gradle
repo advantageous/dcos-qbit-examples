@@ -64,6 +64,9 @@ dependencies {
     compile("org.slf4j:slf4j-api:1.7.12")
     compile('net.logstash.logback:logstash-logback-encoder:4.6')
 
+    //Service discovery
+    compile 'io.advantageous.discovery:lokate-mesos:1.1.5'
+
 
     // Cassandra.
     compile 'com.datastax.cassandra:cassandra-driver-core:3.0.0'
@@ -89,6 +92,17 @@ testDockerContainers {
         portMapping container: 9042, host: 39042
         image "cassandra:2.2.5"
         waitAfterRun 30
+    }
+
+    elk {
+        containerName "elk-df"
+        image "advantageous/elk:0.1"
+        portMapping(container: 9200, host: 9200)
+        portMapping(container: 5044, host: 5044)
+        portMapping(container: 5000, host: 5000)
+        portMapping(container: 5601, host: 5601)
+        portMapping(container: "5001/udp", host: 5001)
+        runArgs " /usr/local/bin/start.sh "
     }
 }
 

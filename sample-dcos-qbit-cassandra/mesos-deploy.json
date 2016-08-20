@@ -27,7 +27,10 @@
     "DEPLOYMENT_ENVIRONMENT": "integration",
     "JAVA_ZIP_LOCATION": "https://s3-us-west-2.amazonaws.com/sample-deploy/sample-dcos-cas-0.9.5.zip",
     "JAVA_RUN_COMMAND": "/opt/sample-dcos-cas-0.9.5/bin/sample-dcos-cas",
-    "JAVA_RUN_DEBUG" : "TRUE"
+    "JAVA_RUN_DEBUG" : "TRUE",
+    "LOGSTASH_HOST" : "logstash.marathon.mesos",
+    "LOGSTASH_PORT" : "10514",
+    "LOGBACK_PATTERN" : "%d{HH:mm:ss.SSS}-[%-5level] %logger{15} - %msg%n"
   },
   "healthChecks": [
     {

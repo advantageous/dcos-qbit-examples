@@ -37,18 +37,23 @@
   "mem": 1024,
   "portDefinitions": [
     {
+      "name" : "grafana",
       "port": 0,
       "protocol": "tcp"
     },
     {
+
+      "name" : "influx-db",
       "port": 0,
       "protocol": "tcp"
     },
     {
+      "name" : "influx-admin",
       "port": 0,
       "protocol": "tcp"
     },
     {
+      "name" : "statsd",
       "port": 0,
       "protocol": "udp"
     }

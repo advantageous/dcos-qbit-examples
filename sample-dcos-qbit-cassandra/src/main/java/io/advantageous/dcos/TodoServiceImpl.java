@@ -82,6 +82,7 @@ public class TodoServiceImpl implements TodoService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final TodoRepo todoRep;
 
+
     public TodoServiceImpl(ServiceManagementBundle mgmt, TodoRepo todoRepo) {
         this.mgmt = mgmt;
         this.todoRep = todoRepo;
@@ -96,7 +97,7 @@ public class TodoServiceImpl implements TodoService {
                 .invoke());
 
         logger.info("Creating discovery service");
-        discoveryService = DiscoveryService.create();
+        discoveryService = DiscoveryService.create(URI.create("marathon://marathon.mesos:8080/"));
 
 
         logger.info("Todo service created");

@@ -202,3 +202,12 @@ $  curl -X POST http://public-slave:10101/v1/todo-service/service  \
 * shutdown cassandra cluster before reconnecting
 * add shutdown to todo service that calls close on TodoRepo
 * add ELK stack and statsd stack to startup docker in gradle build
+
+
+## Notes
+
+Send statsd app to marathon.
+```
+curl -X POST -H "Content-type: application/json" -d @statsd.json http://172.17.0.6:8080/v2/apps 
+```
+
