@@ -1,7 +1,13 @@
 {
-
+  "id": "/sample-dcos3",
+  "cmd": "/opt/install.sh",
+  "cpus": 0.5,
+  "mem": 1024,
+  "disk": 0,
+  "instances": 3,
   "container": {
     "type": "DOCKER",
+    "volumes": [],
     "docker": {
       "image": "advantageous/run-java-zip:0.2",
       "network": "BRIDGE",
@@ -10,54 +16,63 @@
           "containerPort": 8081,
           "hostPort": 0,
           "servicePort": 10101,
-          "protocol": "tcp"
+          "protocol": "tcp",
+          "labels": {}
         },
         {
           "containerPort": 9090,
-          "hostPort":  0,
+          "hostPort": 0,
           "servicePort": 10102,
-          "protocol": "tcp"
+          "protocol": "tcp",
+          "labels": {}
         }
-      ]
+      ],
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": false
     }
   },
-  "cmd": "/opt/install.sh",
-  "cpus": 0.5,
   "env": {
-    "DEPLOYMENT_ENVIRONMENT": "staging",
-    "JAVA_ZIP_LOCATION": "https://s3-us-west-2.amazonaws.com/sample-deploy/sample-dcos-0.9.4.zip",
-    "JAVA_RUN_COMMAND": "/opt/sample-dcos-0.9.4/bin/sample-dcos",
-    "JAVA_RUN_DEBUG" : "TRUE"
+    "LOGSTASH_HOST": "logstash-logback.marathon.mesos",
+    "JAVA_ZIP_LOCATION": "https://s3-us-west-2.amazonaws.com/sample-deploy/sample-dcos-cas-0.9.5.zip",
+    "JAVA_RUN_DEBUG": "TRUE",
+    "LOGSTASH_PORT": "10555",
+    "DEPLOYMENT_ENVIRONMENT": "integration",
+    "LOGBACK_PATTERN": "%d{HH:mm:ss.SSS}-[%-5level] %logger{15} - %msg%n",
+    "JAVA_RUN_COMMAND": "/opt/sample-dcos-cas-0.9.5/bin/sample-dcos-cas"
   },
   "healthChecks": [
     {
+      "path": "/__admin/ok",
+      "protocol": "HTTP",
+      "portIndex": 1,
       "gracePeriodSeconds": 30,
       "intervalSeconds": 20,
+      "timeoutSeconds": 20,
       "maxConsecutiveFailures": 3,
-      "path": "/__admin/ok",
-      "portIndex": 1,
-      "protocol": "HTTP"
+      "ignoreHttp1xx": false
     }
   ],
-  "id": "sample-dcos2",
-  "instances": 3,
-  "mem": 1024,
+  "labels": {
+    "HAPROXY_GROUP": "external",
+    "HAPROXY_0_VHOST": "sample-dcos3.sandbox.mydomain.com"
+  },
   "portDefinitions": [
     {
+      "port": 10101,
+      "protocol": "tcp",
       "name": "eventbus",
-      "port": 0,
-      "protocol": "tcp"
+      "labels": {}
     },
     {
+      "port": 10102,
+      "protocol": "tcp",
       "name": "admin",
-      "port": 0,
-      "protocol": "tcp"
+      "labels": {}
     }
   ],
   "upgradeStrategy": {
-    "minimumHealthCapacity": 0
-  },
-  "labels":{
-    "HAPROXY_GROUP":"external"
+    "minimumHealthCapacity": 0,
+    "maximumOverCapacity": 1
   }
 }
